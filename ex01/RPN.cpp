@@ -6,7 +6,7 @@
 /*   By: dselmy <dselmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 17:49:50 by dselmy            #+#    #+#             */
-/*   Updated: 2023/05/25 17:53:03 by dselmy           ###   ########.fr       */
+/*   Updated: 2023/05/31 17:22:28 by dselmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,11 @@ int multiplication(int first, int second) {
 }
 
 void	RPN::calculate(char operation) {
-	if (myDeque.size() < 2)
-		throw std::runtime_error("Wrong format");
+	if (myDeque.size() < 2) {
+		std::string errMessage;
+		errMessage = std::string("Wrong format - not enough numbers to execute ") + operation + std::string(" operation.");
+		throw std::runtime_error(errMessage);
+	}
 
 	int first, second, result;
 	
@@ -85,7 +88,6 @@ void	RPN::calculate(char operation) {
 	myDeque.push_front(result);
 }
 
-
 int RPN::add (std::string arg) {
 	if (arg.find_first_of("123456789") != std::string::npos) {
 		myDeque.push_front(arg[0] - '0');
@@ -97,7 +99,7 @@ int RPN::add (std::string arg) {
 			return -1;
 		}
 	} else {
-		std::cout << "Error: unkown symbol" << std::endl;
+		std::cout << "Error: unknown symbol" << std::endl;
 		return -1;
 	}
 	return 0;
