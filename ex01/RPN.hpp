@@ -6,7 +6,7 @@
 /*   By: dselmy <dselmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 17:50:01 by dselmy            #+#    #+#             */
-/*   Updated: 2023/05/25 17:53:26 by dselmy           ###   ########.fr       */
+/*   Updated: 2023/06/12 17:54:04 by dselmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include <limits.h>
 #include <string>
 #include <deque>
-#include <stack>
 
 class RPN {
 

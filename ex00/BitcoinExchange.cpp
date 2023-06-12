@@ -6,7 +6,7 @@
 /*   By: dselmy <dselmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 14:06:41 by dselmy            #+#    #+#             */
-/*   Updated: 2023/05/21 17:35:40 by dselmy           ###   ########.fr       */
+/*   Updated: 2023/06/12 17:04:45 by dselmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ BitcoinExchange::BitcoinExchange(const BitcoinExchange & rhs) {
 }
 
 BitcoinExchange & BitcoinExchange::operator= (const BitcoinExchange & rhs) {
-	// clean dbValues somehoww
 	if (!dbValues.empty()) {
 		dbValues.clear();
 	}
@@ -73,7 +72,6 @@ void BitcoinExchange::parseDb() {
 	if (!db.is_open() || db.bad()) {
 		throw (std::runtime_error("Could not open the data.csv file"));
 	}
-	// std::cout << "Opened the data.csv" << std::endl;
 	std::string str;
 	while (std::getline(db, str)) {
 		if (str.compare("date,exchange_rate") == 0)
@@ -112,7 +110,6 @@ void BitcoinExchange::parseDb() {
 }
 
 void BitcoinExchange::calculate(const char * inputFile) const {
-	std::cout << "Parsing [" << inputFile << "]" << std::endl;
 	std::ifstream input (inputFile);
 	if (input.bad() || !input.is_open())
 		throw (std::runtime_error("Could not open " + std::string(inputFile)));

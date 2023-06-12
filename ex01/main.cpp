@@ -6,7 +6,7 @@
 /*   By: dselmy <dselmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 17:48:35 by dselmy            #+#    #+#             */
-/*   Updated: 2023/05/25 17:54:19 by dselmy           ###   ########.fr       */
+/*   Updated: 2023/06/12 17:07:22 by dselmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int main (int argc, char ** argv)
 				std::cout << "Allowed symbols: 123456789+-*/ delimeted by a whitespace" << std::endl;
 				return -1;
 			}
-			std::cout << "token: [" << token << "]" << std::endl;
 			if (calculator.add(token) < 0)
 				return -1;
 		}
