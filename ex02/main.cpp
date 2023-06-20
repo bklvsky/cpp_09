@@ -6,7 +6,7 @@
 /*   By: dselmy <dselmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 18:21:06 by dselmy            #+#    #+#             */
-/*   Updated: 2023/06/09 14:31:50 by dselmy           ###   ########.fr       */
+/*   Updated: 2023/06/20 18:06:12 by dselmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,12 @@
 #include <exception>
 #include <cerrno>
 
-int checkArguments(int argc, char ** argv) {
+static void putWrongFormat(std::string token) {
+	std::cout << "Error: wrong format of argument [" << token << "]" << std::endl;
+	std::cout << "Expected a sequence of positive numbers to sort." << std::endl;
+}
+
+static int checkArguments(int argc, char ** argv) {
 	std::string token;
 	errno = 0;
 	for (int i = 1; i < argc; i++) {
@@ -28,17 +33,17 @@ int checkArguments(int argc, char ** argv) {
 			if (token.empty())
 				break;
 			if (token.find_first_not_of("0123456789") != std::string::npos) {
-				std::cout << "Error: wrong format of argument [" << token << "]" << std::endl;
-				std::cout << "Expected a sequence of numbers to sort" << std::endl;
+				putWrongFormat(token);
 				return -1;
 			}
-			long res = strtol(token.c_str(), NULL, 10);
-			if (errno != 0) {
-				std::cout << "Error: range error occurred while parsing " << token << std::endl;
+			if ((token.size() == 10 && token.compare("2147483647") > 0) || token.size() > 10) {
+				std::cout << "Error: too large a number: " 
+													<< token << ". " << std::endl;
 				return -1;
 			}
-			if (res <= 0) {
-				std::cout << "Error: negative number encountered" << std::endl;
+			int res = atoi(token.c_str());
+			if (res == 0) {
+				putWrongFormat(token);
 				return -1;
 			}
 		}
