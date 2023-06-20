@@ -6,7 +6,7 @@
 /*   By: dselmy <dselmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 18:21:42 by dselmy            #+#    #+#             */
-/*   Updated: 2023/06/20 17:06:14 by dselmy           ###   ########.fr       */
+/*   Updated: 2023/06/20 17:57:08 by dselmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,16 @@ PmergeMe & PmergeMe::operator= (const PmergeMe & rhs)
 
 PmergeMe::~PmergeMe() {}
 
-static void putVct(const std::vector<long> & vct) {
+static void putVct(const std::vector<int> & vct) {
 	for (size_t i = 0; i < vct.size(); i++) {
 		std::cout << vct[i] << " ";
 	}
 	std::cout << std::endl;
 }
 
-static void putLst(const std::list<long> & lst)
+static void putLst(const std::list<int> & lst)
 {
-	for (std::list<long>::const_iterator it = lst.begin(); it != lst.end(); it++) {
+	for (std::list<int>::const_iterator it = lst.begin(); it != lst.end(); it++) {
 		std::cout << *it << " ";
 	}
 	std::cout << std::endl;
@@ -79,7 +79,7 @@ void PmergeMe::sortVct(int argc, char ** argv)
 		initVct.pop_back();
 	}
 
-	std::vector< std::vector<long> > pairs;
+	std::vector< std::vector<int> > pairs;
 	makePairs(pairs);
 	sortEachPair(pairs);
 	sortInsert(pairs, pairs.size() - 1);
@@ -100,9 +100,9 @@ void PmergeMe::sortVct(int argc, char ** argv)
 	Methods for sorting using std::vector
 */
 
-void PmergeMe::makePairs(std::vector< std::vector<long> > & pairs)
+void PmergeMe::makePairs(std::vector< std::vector<int> > & pairs)
 {
-	std::vector<long> tmp;
+	std::vector<int> tmp;
 	for (size_t i = 0; i < initVct.size(); i++) {
 		tmp.push_back(initVct[i]);
 		if (tmp.size() == 2) {
@@ -112,23 +112,23 @@ void PmergeMe::makePairs(std::vector< std::vector<long> > & pairs)
 	}
 }
 
-void PmergeMe::sortEachPair(std::vector< std::vector<long> > & pairs)
+void PmergeMe::sortEachPair(std::vector< std::vector<int> > & pairs)
 {
 	for (size_t i = 0; i < pairs.size(); i++) {
-		std::vector<long> & pair = pairs[i];
+		std::vector<int> & pair = pairs[i];
 		if (pair.front() > pair.back()) {
 			std::swap(pair[0], pair[1]);
 		}
 	}
 }
 
-void PmergeMe::sortInsert(std::vector< std::vector<long> > & pairs, size_t right)
+void PmergeMe::sortInsert(std::vector< std::vector<int> > & pairs, size_t right)
 {
 	if (right < 1)
 		return;
 	sortInsert(pairs, right - 1);
 
-	std::vector<long> key_right = pairs[right];
+	std::vector<int> key_right = pairs[right];
 	int left = right - 1;
 
 	while (left >= 0 && comparePairsVct(key_right, pairs[left])) { // changed comparePairs prototype
@@ -138,27 +138,27 @@ void PmergeMe::sortInsert(std::vector< std::vector<long> > & pairs, size_t right
 	pairs[left + 1] = key_right;
 }
 
-std::vector<long> PmergeMe::makePend(std::vector< std::vector<long> > & pairs)
+std::vector<int> PmergeMe::makePend(std::vector< std::vector<int> > & pairs)
 {
-	std::vector<long> pend;
+	std::vector<int> pend;
 
 	resVct.reserve(initVct.size());
 	resVct.push_back(pairs[0][0]);
 	resVct.push_back(pairs[0][1]);
 
 	for (size_t i = 1; i < pairs.size(); i++) {
-		long resValue = pairs[i][1];
-		long pendValue = pairs[i][0];
+		int resValue = pairs[i][1];
+		int pendValue = pairs[i][0];
 		resVct.push_back(resValue);
 		pend.push_back(pendValue);
 	}
 	return pend;
 }
 
-void PmergeMe::mergePend(std::vector<long> & pend, std::vector<long> & orderingSequence)
+void PmergeMe::mergePend(std::vector<int> & pend, std::vector<int> & orderingSequence)
 {
 	size_t i = 0;
-	for (std::vector<long>::iterator it = orderingSequence.begin(); it != orderingSequence.end(); it++) {
+	for (std::vector<int>::iterator it = orderingSequence.begin(); it != orderingSequence.end(); it++) {
 		int groupSize = *it;
 		while (groupSize > 0) {
 			int index = groupSize - 1 + i;
@@ -170,12 +170,12 @@ void PmergeMe::mergePend(std::vector<long> & pend, std::vector<long> & orderingS
 	}
 }
 
-void PmergeMe::mergePairs(std::vector< std::vector<long> > & pairs)
+void PmergeMe::mergePairs(std::vector< std::vector<int> > & pairs)
 {
-	std::vector<long> pend = makePend(pairs);
+	std::vector<int> pend = makePend(pairs);
 
-	std::vector<long> orderingSequence = 
-					makeOrderingSequence< std::vector<long> >(pend.size());
+	std::vector<int> orderingSequence = 
+					makeOrderingSequence< std::vector<int> >(pend.size());
 	mergePend(pend, orderingSequence);
 }
 
@@ -204,7 +204,7 @@ void PmergeMe::sortLst(int argc, char ** argv)
 	}
 
 	
-	std::list< std::list<long> > pairs;
+	std::list< std::list<int> > pairs;
 	makePairs(pairs);
 
 	std::cout << std::endl;
@@ -219,10 +219,10 @@ void PmergeMe::sortLst(int argc, char ** argv)
 	timeMsLst = makeTime(start);
 }
 
-void PmergeMe::makePairs(std::list< std::list<long> > & pairs)
+void PmergeMe::makePairs(std::list< std::list<int> > & pairs)
 {
-	std::list<long> tmp;
-	for (std::list<long>::iterator it = initLst.begin(); it != initLst.end(); it++)
+	std::list<int> tmp;
+	for (std::list<int>::iterator it = initLst.begin(); it != initLst.end(); it++)
 	{
 		tmp.push_back(*it);
 		if (tmp.size() == 2) {
@@ -231,30 +231,30 @@ void PmergeMe::makePairs(std::list< std::list<long> > & pairs)
 		}
 	}
 }
-void PmergeMe::sortEachPair(std::list< std::list<long> > & pairs)
+void PmergeMe::sortEachPair(std::list< std::list<int> > & pairs)
 {
-	for (std::list< std::list<long> >::iterator it = pairs.begin();
+	for (std::list< std::list<int> >::iterator it = pairs.begin();
 													it != pairs.end(); it++)
 	{
-		std::list<long> & pair = *it;
+		std::list<int> & pair = *it;
 		if (pair.front() > pair.back()) {
 			std::swap(pair.front(), pair.back());
 		}
 	}
 }
 
-void PmergeMe::sortInsert(std::list< std::list<long> > & pairs)
+void PmergeMe::sortInsert(std::list< std::list<int> > & pairs)
 {
 	// iterator to the next element to insert
 	// and to erase it from the initial position
-	std::list< std::list<long> >::iterator itPos = ++(pairs.begin());
+	std::list< std::list<int> >::iterator itPos = ++(pairs.begin());
 	
 	// temporary iterator to preserve the end of the sorted sequence
 	// after erasing the inserted element from its initial position
-	std::list< std::list<long> >::iterator itSorted (itPos);
+	std::list< std::list<int> >::iterator itSorted (itPos);
 
 	while(itPos != pairs.end()) {
-		std::list<long> keyToInsert = *itSorted;
+		std::list<int> keyToInsert = *itSorted;
 		itSorted++;
 		pairs.erase(itPos);
 		pairs.insert(std::upper_bound(pairs.begin(), itSorted, keyToInsert, comparePairsLst), keyToInsert);
@@ -262,21 +262,21 @@ void PmergeMe::sortInsert(std::list< std::list<long> > & pairs)
 	}
 }
 
-void PmergeMe::mergePairs(std::list< std::list<long> > & pairs)
+void PmergeMe::mergePairs(std::list< std::list<int> > & pairs)
 {
-	std::list<long> pend = makePend(pairs);
+	std::list<int> pend = makePend(pairs);
 
-	std::list<long> orderingSequence =
-					makeOrderingSequence< std::list<long> >(pend.size());
+	std::list<int> orderingSequence =
+					makeOrderingSequence< std::list<int> >(pend.size());
 
 	mergePend(pend, orderingSequence);
 }
 
-void PmergeMe::mergeGroup(std::list<long>::iterator pendIt, std::list<long>::iterator resIt, size_t n)
+void PmergeMe::mergeGroup(std::list<int>::iterator pendIt, std::list<int>::iterator resIt, size_t n)
 {
 	while (n > 0) {
 		// std::cout << "Inserting a " << *pendIt << " before the " << *resIt << std::endl;
-		std::list<long>::iterator nextRes = resIt;
+		std::list<int>::iterator nextRes = resIt;
 		nextRes--;
 		resLst.insert(std::upper_bound(resLst.begin(), resIt, *pendIt), *pendIt);	
 		resIt = nextRes;
@@ -285,10 +285,10 @@ void PmergeMe::mergeGroup(std::list<long>::iterator pendIt, std::list<long>::ite
 	}
 }
 
-void PmergeMe::mergePend(std::list<long> & pend, std::list<long> & orderingSequence)
+void PmergeMe::mergePend(std::list<int> & pend, std::list<int> & orderingSequence)
 {
-	std::list<long>::iterator it = pend.begin();
-	std::list<long>::iterator biggerPairIt = resLst.begin();
+	std::list<int>::iterator it = pend.begin();
+	std::list<int>::iterator biggerPairIt = resLst.begin();
 	biggerPairIt++;
 	biggerPairIt++;
 
@@ -296,7 +296,7 @@ void PmergeMe::mergePend(std::list<long> & pend, std::list<long> & orderingSeque
 	// we iterate through a group backwards
 	// insert each element [begin, according bigger element];
 	// to keep track of this bigger element we can keep an iterator to it
-	for (std::list<long>::iterator groupsIt = orderingSequence.begin();
+	for (std::list<int>::iterator groupsIt = orderingSequence.begin();
 									groupsIt != orderingSequence.end(); groupsIt++)
 	{
 		for (int n = 0; n < *groupsIt - 1; n++) {
@@ -310,19 +310,19 @@ void PmergeMe::mergePend(std::list<long> & pend, std::list<long> & orderingSeque
 	}
 }
 
-std::list<long> PmergeMe::makePend(std::list< std::list<long> > & pairs)
+std::list<int> PmergeMe::makePend(std::list< std::list<int> > & pairs)
 {
-	std::list<long> pend;
+	std::list<int> pend;
 
 	resLst.push_back(pairs.front().front());
 	resLst.push_back(pairs.front().back());
 	
 	pairs.pop_front();
-	for (std::list< std::list<long> >::iterator it = pairs.begin();
+	for (std::list< std::list<int> >::iterator it = pairs.begin();
 							it != pairs.end(); it++)
 	{
-		long resValue = (*it).back();
-		long pendValue = (*it).front();
+		int resValue = (*it).back();
+		int pendValue = (*it).front();
 		resLst.push_back(resValue);
 		pend.push_back(pendValue);
 	}
@@ -381,13 +381,13 @@ void PmergeMe::putTime() const
 }
 
 /*Comparison function that returns True if left < right*/
-bool PmergeMe:: comparePairsLst(const std::list<long> & left, const std::list<long> & right)
+bool PmergeMe:: comparePairsLst(const std::list<int> & left, const std::list<int> & right)
 {
 	return left.back() < right.back();
 }
 
 /*Comparison function that returns True if left < right*/
-bool PmergeMe:: comparePairsVct(const std::vector<long> & left, const std::vector<long> & right)
+bool PmergeMe:: comparePairsVct(const std::vector<int> & left, const std::vector<int> & right)
 {
 	return left.back() < right.back();
 }

@@ -6,7 +6,7 @@
 /*   By: dselmy <dselmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 18:20:59 by dselmy            #+#    #+#             */
-/*   Updated: 2023/06/20 17:06:16 by dselmy           ###   ########.fr       */
+/*   Updated: 2023/06/20 17:56:57 by dselmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,39 +34,39 @@ public:
 
 private:
 
-	std::list<long>	initLst;
-	std::list<long>	resLst;
+	std::list<int>	initLst;
+	std::list<int>	resLst;
 	double			timeMsLst;
 
-	std::vector<long>	initVct;
-	std::vector<long>	resVct;
+	std::vector<int>	initVct;
+	std::vector<int>	resVct;
 	double				timeMsVct;
 
 	/* Methods for sorting using std::vector */
 
-	void				makePairs(std::vector< std::vector<long> > & pairs);
-	void				sortEachPair(std::vector< std::vector<long> > & pairs);
-	void				sortInsert(std::vector< std::vector<long> > & pairs, size_t right);
-	void				mergePairs(std::vector< std::vector<long> > & pairs);
-	void				mergePend(std::vector<long> & pend, std::vector<long> & orderingSequence);
-	std::vector<long>	makePend(std::vector< std::vector<long> > & pairs);
+	void				makePairs(std::vector< std::vector<int> > & pairs);
+	void				sortEachPair(std::vector< std::vector<int> > & pairs);
+	void				sortInsert(std::vector< std::vector<int> > & pairs, size_t right);
+	void				mergePairs(std::vector< std::vector<int> > & pairs);
+	void				mergePend(std::vector<int> & pend, std::vector<int> & orderingSequence);
+	std::vector<int>	makePend(std::vector< std::vector<int> > & pairs);
 
 	/* Methods for sorting using std::list */
 
-	void			makePairs(std::list< std::list<long> > & pairs);
-	void			sortEachPair(std::list< std::list<long> > & pairs);
-	void			sortInsert(std::list< std::list<long> > & pairs);
-	void			mergePairs(std::list< std::list<long> > & pairs);
-	void			mergePend(std::list<long> & pend, 
-									std::list<long> & orderingSequence);
-	std::list<long>	makePend(std::list< std::list<long> > & pairs);
-	void			mergeGroup(std::list<long>::iterator pendIt, 
-							std::list<long>::iterator resIt, size_t n);
+	void			makePairs(std::list< std::list<int> > & pairs);
+	void			sortEachPair(std::list< std::list<int> > & pairs);
+	void			sortInsert(std::list< std::list<int> > & pairs);
+	void			mergePairs(std::list< std::list<int> > & pairs);
+	void			mergePend(std::list<int> & pend, 
+									std::list<int> & orderingSequence);
+	std::list<int>	makePend(std::list< std::list<int> > & pairs);
+	void			mergeGroup(std::list<int>::iterator pendIt, 
+							std::list<int>::iterator resIt, size_t n);
 
 	/* Helper methods */
 
-	static bool comparePairsLst(const std::list<long> & left, const std::list<long> & right);
-	static bool comparePairsVct(const std::vector<long> & left, const std::vector<long> & right);
+	static bool comparePairsLst(const std::list<int> & left, const std::list<int> & right);
+	static bool comparePairsVct(const std::vector<int> & left, const std::vector<int> & right);
 	double makeTime(const std::clock_t & start) const;
 	void putTime() const;
 	
