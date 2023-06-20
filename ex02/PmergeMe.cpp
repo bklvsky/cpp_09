@@ -6,7 +6,7 @@
 /*   By: dselmy <dselmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 18:21:42 by dselmy            #+#    #+#             */
-/*   Updated: 2023/06/12 18:11:54 by dselmy           ###   ########.fr       */
+/*   Updated: 2023/06/20 17:06:14 by dselmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,11 @@ void PmergeMe::sortVct(int argc, char ** argv)
 		return;
 	processNumbers(argc, argv, initVct);
 
+	if (initVct.size() <= 1) {
+		resVct = initVct;
+		timeMsVct = makeTime(start);
+		return;
+	}
 	int staggler = 0;
 	if (initVct.size() % 2 == 1) {
 		staggler = initVct.back();
@@ -88,7 +93,7 @@ void PmergeMe::sortVct(int argc, char ** argv)
 	std::clock_t end = std::clock();
 	if (end == std::clock_t(-1))
 		return;
-	timeMsVct = 1000.0 * (end - start) / CLOCKS_PER_SEC;
+	timeMsVct = makeTime(start);
 }
 
 /*
@@ -186,10 +191,16 @@ void PmergeMe::sortLst(int argc, char ** argv)
 	
 	processNumbers(argc, argv, initLst);
 	
+	if (initLst.size() == 1) {
+		resLst = initLst;
+		timeMsLst = makeTime(start);
+		return;
+	}
+
 	int staggler = 0;
 	if (initVct.size() % 2 == 1) {
-		staggler = initVct.back();
-		initVct.pop_back();
+		staggler = initLst.back();
+		initLst.pop_back();
 	}
 
 	
@@ -202,14 +213,10 @@ void PmergeMe::sortLst(int argc, char ** argv)
 	mergePairs(pairs);
 
 	if (staggler > 0) {
-		initVct.push_back(staggler);
-		resVct.insert(std::upper_bound(resVct.begin(), resVct.end(), staggler), staggler);
+		initLst.push_back(staggler);
+		resLst.insert(std::upper_bound(resLst.begin(), resLst.end(), staggler), staggler);
 	}
-	
-	std::clock_t end = std::clock();
-	if (end == std::clock_t(-1))
-		return;
-	timeMsLst = 1000.0 * (end - start) / CLOCKS_PER_SEC;
+	timeMsLst = makeTime(start);
 }
 
 void PmergeMe::makePairs(std::list< std::list<long> > & pairs)
@@ -285,7 +292,6 @@ void PmergeMe::mergePend(std::list<long> & pend, std::list<long> & orderingSeque
 	biggerPairIt++;
 	biggerPairIt++;
 
-
 	// we move an iterator 
 	// we iterate through a group backwards
 	// insert each element [begin, according bigger element];
@@ -336,15 +342,26 @@ void PmergeMe::print() const
 	std::cout << "Before: ";
 	if (!initVct.empty()) {
 		putVct(initVct);
-		std::cout << "After:  ";
+		std::cout << "After: ";
 		putVct(resVct);
 	}
 	else {
 		putLst(initLst);
-		std::cout << "After:  ";
+		std::cout << "After: ";
 		putLst(resLst);
 	}
 	putTime();
+}
+
+/*
+	Helper methods
+*/
+
+double PmergeMe::makeTime(const std::clock_t & start) const {
+	std::clock_t end = std::clock();
+	if (end == std::clock_t(-1))
+		return -1;
+	return 1000.0 * (end - start) / CLOCKS_PER_SEC;
 }
 
 void PmergeMe::putTime() const

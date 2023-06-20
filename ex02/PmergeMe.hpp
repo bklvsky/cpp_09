@@ -6,7 +6,7 @@
 /*   By: dselmy <dselmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 18:20:59 by dselmy            #+#    #+#             */
-/*   Updated: 2023/06/09 14:34:15 by dselmy           ###   ########.fr       */
+/*   Updated: 2023/06/20 17:06:16 by dselmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ private:
 
 	static bool comparePairsLst(const std::list<long> & left, const std::list<long> & right);
 	static bool comparePairsVct(const std::vector<long> & left, const std::vector<long> & right);
+	double makeTime(const std::clock_t & start) const;
 	void putTime() const;
 	
 	template<typename T>
