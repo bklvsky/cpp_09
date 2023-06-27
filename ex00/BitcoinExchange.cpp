@@ -79,24 +79,27 @@ void BitcoinExchange::parseDb() {
 		size_t delimPos = str.find(',');
 		
 		if (delimPos == str.npos) {
-			std::string errMessage = "Error: wrong database format (no comma delimeter) at:\n" + str;
+			std::string errMessage = "Wrong database format (no comma delimeter) at:\n" + str;
 			db.close();
 			throw (std::runtime_error(errMessage));
 		}
 
 		std::string date = str.substr(0, delimPos);
 		
-		// TBD: CHECK THE FLOAT OVERFLOW
 		std::string valueStr = str.substr(delimPos + 1);
 		if (valueStr.find_first_not_of("-+0123456789.", 0) != std::string::npos) {
-			std::string errMessage = "Error: wrong database format (unknown symbol) at:\n" + str; // do i really need to do it or should i just skip the line?
+			std::string errMessage = "Wrong database format (unknown symbol) at:\n" + str;
 			db.close();
 			throw (std::runtime_error(errMessage));
 		}
 
+		errno = 0;
 		double value = strtod(valueStr.c_str(), NULL);
-		// CHECK FOR OVERFLOW HERE
-		// https://codereview.stackexchange.com/questions/199775/convert-string-to-double-and-check-for-errors
+		if (errno) {
+			std::string errMessage =  "Double overflow while reading data.csv at:\n" + str;
+			db.close();
+			throw (std::runtime_error(errMessage));
+		}
 		
 		if (value < 0) {
 			std::string errMessage = "Wrong database format (negative value) at:\n" + str;
@@ -124,10 +127,16 @@ void BitcoinExchange::calculate(const char * inputFile) const {
 void BitcoinExchange::getBitcoinValue(std::string date, float value) const {
 	std::map<std::string, float>::const_iterator it = dbValues.upper_bound(date);
 	if (it == dbValues.begin() && it->first != date) {
-		std::cout << "Error: no data for this date." << std::endl;
+		std::cerr << "Error: no data for this date." << std::endl;
 		return;
 	}
-	std::cout << date << " => " << value * (--it)->second << std::endl;
+	--it;
+	if (it->second > std::numeric_limits<double>::max() / value) {
+		std::cerr << "Error: double overflow while " << 
+						"calculating value for " << date << std::endl;
+		return;
+	}
+	std::cout << date << " => " << value << " = " << value * it->second << std::endl;
 }
 
 static int checkInputFormat(std::string str, size_t delimPos) {
@@ -138,12 +147,12 @@ static int checkInputFormat(std::string str, size_t delimPos) {
 }
 
 static int verifyValue(double value) {
-	if (value >= 0.0 && value <= 1000)
+	if (value > 0.0 && value < 1000)
 		return 0;
-	if (value < 0)
-		std::cout << "Error: not a positive number." << std::endl;
+	if (value <= 0.0)
+		std::cerr << "Error: not a positive number." << std::endl;
 	else
-		std::cout << "Error: too large a number." << std::endl;
+		std::cerr << "Error: too large a number." << std::endl;
 	return -1;
 }
 
@@ -165,7 +174,7 @@ void BitcoinExchange::parseInput(std::string str) const {
 	std::string valueStr = str.substr(delimPos + 2);
 	
 	if (valueStr.find_first_not_of("01234567890-+.") != std::string::npos) {
-		std::cout << "Error: bad value format => [" << valueStr << "]" << std::endl;
+		std::cerr << "Error: bad value format => [" << valueStr << "]" << std::endl;
 		return;
 	}
 	// std::cout << valueStr << std::endl;

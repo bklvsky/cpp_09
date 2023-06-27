@@ -15,13 +15,23 @@ SRCS			=	main.cpp \
 OBJS			= $(SRCS:.cpp=.o)
 DEP				= $(SRCS:.cpp=.d)
 
+DB				= data.csv	
+
 CXX				= c++
-RM				= rm -f
+RM				= rm -rf
 CXXFLAGS		= -std=c++98 -Wall -Wextra -Werror -I.
 
 NAME			= btc
 
-all:			$(NAME)
+all:			$(NAME) $(DB)
+
+data: $(DB)
+
+$(DB):
+	wget https://cdn.intra.42.fr/document/document/17907/cpp_09.tgz
+	tar -xzf cpp_09.tgz
+	mv ./cpp_09/$(DB) ./
+	$(RM) ./cpp_09/ ./cpp_09.tgz
 
 $(NAME):		$(OBJS)
 				$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJS)
@@ -33,7 +43,7 @@ clean:
 				$(RM) $(OBJS) $(DEP)
 
 fclean:			clean
-				$(RM) $(NAME)
+				$(RM) $(NAME) $(DB)
 
 re:				fclean $(NAME)
 

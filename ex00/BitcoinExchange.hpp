@@ -14,8 +14,10 @@
 # define BITCOIN_EXCHANGE_HPP
 
 #include <algorithm>
+#include <errno.h>
 #include <iostream>
 #include <fstream>
+#include <limits>
 #include <map>
 #include <sstream>
 #include <string>
