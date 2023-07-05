@@ -6,7 +6,7 @@
 /*   By: dselmy <dselmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 14:06:41 by dselmy            #+#    #+#             */
-/*   Updated: 2023/06/12 17:04:45 by dselmy           ###   ########.fr       */
+/*   Updated: 2023/07/05 02:04:22 by dselmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,12 +127,12 @@ void BitcoinExchange::calculate(const char * inputFile) const {
 void BitcoinExchange::getBitcoinValue(std::string date, float value) const {
 	std::map<std::string, float>::const_iterator it = dbValues.upper_bound(date);
 	if (it == dbValues.begin() && it->first != date) {
-		std::cerr << "Error: no data for this date." << std::endl;
+		std::cout << "Error: no data for this date." << std::endl;
 		return;
 	}
 	--it;
 	if (it->second > std::numeric_limits<double>::max() / value) {
-		std::cerr << "Error: double overflow while " << 
+		std::cout << "Error: double overflow while " << 
 						"calculating value for " << date << std::endl;
 		return;
 	}
@@ -150,9 +150,9 @@ static int verifyValue(double value) {
 	if (value > 0.0 && value < 1000)
 		return 0;
 	if (value <= 0.0)
-		std::cerr << "Error: not a positive number." << std::endl;
+		std::cout << "Error: not a positive number." << std::endl;
 	else
-		std::cerr << "Error: too large a number." << std::endl;
+		std::cout << "Error: too large a number." << std::endl;
 	return -1;
 }
 
@@ -174,7 +174,7 @@ void BitcoinExchange::parseInput(std::string str) const {
 	std::string valueStr = str.substr(delimPos + 2);
 	
 	if (valueStr.find_first_not_of("01234567890-+.") != std::string::npos) {
-		std::cerr << "Error: bad value format => [" << valueStr << "]" << std::endl;
+		std::cout << "Error: bad value format => [" << valueStr << "]" << std::endl;
 		return;
 	}
 	// std::cout << valueStr << std::endl;

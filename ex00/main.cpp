@@ -6,7 +6,7 @@
 /*   By: dselmy <dselmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 14:06:31 by dselmy            #+#    #+#             */
-/*   Updated: 2023/05/21 17:45:09 by dselmy           ###   ########.fr       */
+/*   Updated: 2023/07/05 02:03:52 by dselmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int main (int argc, char ** argv)
 	} 
 	catch (std::exception & e)
 	{
-		std::cerr << "Error: " << e.what() << std::endl;
+		std::cout << "Error: " << e.what() << std::endl;
 		return 1;
 	}
 }
