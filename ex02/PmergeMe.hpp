@@ -6,7 +6,7 @@
 /*   By: dselmy <dselmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 18:20:59 by dselmy            #+#    #+#             */
-/*   Updated: 2023/06/20 17:56:57 by dselmy           ###   ########.fr       */
+/*   Updated: 2023/07/05 02:01:17 by dselmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,42 +31,43 @@ public:
 	void sortVct(int argc, char ** argv);
 	void sortLst(int argc, char ** argv);
 	void print() const;
+	void checkResult() const;
 
 private:
 
-	std::list<int>	initLst;
-	std::list<int>	resLst;
+	std::list<unsigned>	initLst;
+	std::list<unsigned>	resLst;
 	double			timeMsLst;
 
-	std::vector<int>	initVct;
-	std::vector<int>	resVct;
+	std::vector<unsigned>	initVct;
+	std::vector<unsigned>	resVct;
 	double				timeMsVct;
 
 	/* Methods for sorting using std::vector */
 
-	void				makePairs(std::vector< std::vector<int> > & pairs);
-	void				sortEachPair(std::vector< std::vector<int> > & pairs);
-	void				sortInsert(std::vector< std::vector<int> > & pairs, size_t right);
-	void				mergePairs(std::vector< std::vector<int> > & pairs);
-	void				mergePend(std::vector<int> & pend, std::vector<int> & orderingSequence);
-	std::vector<int>	makePend(std::vector< std::vector<int> > & pairs);
+	void				makePairs(std::vector< std::vector<unsigned> > & pairs);
+	void				sortEachPair(std::vector< std::vector<unsigned> > & pairs);
+	void				sortInsert(std::vector< std::vector<unsigned> > & pairs, size_t right);
+	void				mergePairs(std::vector< std::vector<unsigned> > & pairs);
+	void				mergePend(std::vector<unsigned> & pend, std::vector<unsigned> & orderingSequence);
+	std::vector<unsigned>	makePend(std::vector< std::vector<unsigned> > & pairs);
 
 	/* Methods for sorting using std::list */
 
-	void			makePairs(std::list< std::list<int> > & pairs);
-	void			sortEachPair(std::list< std::list<int> > & pairs);
-	void			sortInsert(std::list< std::list<int> > & pairs);
-	void			mergePairs(std::list< std::list<int> > & pairs);
-	void			mergePend(std::list<int> & pend, 
-									std::list<int> & orderingSequence);
-	std::list<int>	makePend(std::list< std::list<int> > & pairs);
-	void			mergeGroup(std::list<int>::iterator pendIt, 
-							std::list<int>::iterator resIt, size_t n);
+	void			makePairs(std::list< std::list<unsigned> > & pairs);
+	void			sortEachPair(std::list< std::list<unsigned> > & pairs);
+	void			sortInsert(std::list< std::list<unsigned> > & pairs);
+	void			mergePairs(std::list< std::list<unsigned> > & pairs);
+	void			mergePend(std::list<unsigned> & pend, 
+									std::list<unsigned> & orderingSequence);
+	std::list<unsigned>	makePend(std::list< std::list<unsigned> > & pairs);
+	void			mergeGroup(std::list<unsigned>::iterator pendIt, 
+							std::list<unsigned>::iterator resIt, size_t n);
 
 	/* Helper methods */
 
-	static bool comparePairsLst(const std::list<int> & left, const std::list<int> & right);
-	static bool comparePairsVct(const std::vector<int> & left, const std::vector<int> & right);
+	static bool comparePairsLst(const std::list<unsigned> & left, const std::list<unsigned> & right);
+	static bool comparePairsVct(const std::vector<unsigned> & left, const std::vector<unsigned> & right);
 	double makeTime(const std::clock_t & start) const;
 	void putTime() const;
 	
@@ -83,8 +84,8 @@ private:
 			if (sequence.size() > 1) {
 				// N-th Jacobstal number formula is:
 				// Jn = Jn-1 + 2 × Jn-2
-				int previous = sequence.back();
-				int before_previous = *(++sequence.rbegin());
+				unsigned previous = sequence.back();
+				unsigned before_previous = *(++sequence.rbegin());
 				jacobstalNum = previous + 2 * before_previous;
 			}
 		}
@@ -96,7 +97,7 @@ private:
 	template <typename T>
 	void processNumbers(int argc, char ** argv, T & cont)
 	{
-		int number;
+		unsigned number;
 		for (int i = 1; i < argc; i++) {
 			std::stringstream stream(argv[i]);
 			stream >> number;

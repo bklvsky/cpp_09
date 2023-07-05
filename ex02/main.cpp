@@ -6,7 +6,7 @@
 /*   By: dselmy <dselmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 18:21:06 by dselmy            #+#    #+#             */
-/*   Updated: 2023/06/20 18:06:12 by dselmy           ###   ########.fr       */
+/*   Updated: 2023/07/05 02:02:55 by dselmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,24 @@
 #include <cstdlib>
 #include <iostream>
 #include <sstream>
+#include <string>
 #include <exception>
-#include <cerrno>
+#include <limits>
 
 static void putWrongFormat(std::string token) {
 	std::cout << "Error: wrong format of argument [" << token << "]" << std::endl;
 	std::cout << "Expected a sequence of positive numbers to sort." << std::endl;
 }
 
+static std::string maxUToString()
+{
+	std::stringstream ss;
+	ss << std::numeric_limits<unsigned>::max();
+	return ss.str();
+}
+
 static int checkArguments(int argc, char ** argv) {
 	std::string token;
-	errno = 0;
 	for (int i = 1; i < argc; i++) {
 		std::stringstream stream (argv[i]);
 		while (true) {
@@ -36,12 +43,15 @@ static int checkArguments(int argc, char ** argv) {
 				putWrongFormat(token);
 				return -1;
 			}
-			if ((token.size() == 10 && token.compare("2147483647") > 0) || token.size() > 10) {
-				std::cout << "Error: too large a number: " 
-													<< token << ". " << std::endl;
+
+			if (token.size() > 10 ||
+					(token.size() == 10 && token > maxUToString()))
+			{
+				std::cout << "Error: too large a number: " << token << ". " << std::endl;
 				return -1;
 			}
-			int res = atoi(token.c_str());
+
+			unsigned res = strtoul(token.c_str(), NULL, 10);
 			if (res == 0) {
 				putWrongFormat(token);
 				return -1;
@@ -66,15 +76,5 @@ int main(int argc, char ** argv) {
 	sorter.sortLst(argc, argv);
 
 	sorter.print();
-	// PmergeMe < std::list<int>, std::list<std::list <int> > > sorterLst;
-	// sorterLst.sort(argc, argv);
-
-	// PmergeMe < std::vector<int>, std::vector <std::vector<int> > > sorterVct;
-	// sorterVct.sort(argc, argv);
-	
-	// try {
-	// } catch (std::exception & e) {
-	// 	std::cout << "Error: " << e.what() << std::endl;
-	// 	return 1;
-	// }
+	// sorter.checkResult();
 }
